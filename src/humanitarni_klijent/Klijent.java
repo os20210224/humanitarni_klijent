@@ -30,17 +30,18 @@ public class Klijent implements Runnable {
 			konzola = new BufferedReader(new InputStreamReader(System.in));
 			od_servera = new BufferedReader(new InputStreamReader(soket.getInputStream()));
 			ka_serveru = new PrintStream(soket.getOutputStream());
-
+			// startovanje threada za primanje poruka
 			new Thread(new Klijent()).start();
-
+			// slanje poruka
 			while (!kraj) {
 				ka_serveru.println(konzola.readLine());
 			}
-
 			soket.close();
+		} catch (SocketException e) {
+			System.err.println("Host ugasen");
 		} catch (IOException e) {
 			System.err.println("IOException pri konektovanju sa hostom: " + e);
-		}
+		} 
 
 	}
 
@@ -55,9 +56,10 @@ public class Klijent implements Runnable {
 					return;
 				}
 			}
+		} catch (SocketException e) {
+			System.err.println("Host ugasen");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("IOException pri konektovanju sa hostom: " + e);
 		}
 
 	}
