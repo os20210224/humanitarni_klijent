@@ -41,7 +41,7 @@ public class Klijent implements Runnable {
 			System.err.println("Host ugasen");
 		} catch (IOException e) {
 			System.err.println("IOException pri konektovanju sa hostom: " + e);
-		} 
+		}
 
 	}
 
@@ -49,7 +49,10 @@ public class Klijent implements Runnable {
 	public void run() {
 		String string;
 		try {
-			while ((string = od_servera.readLine()) != null) {
+			while (true) {
+				string = od_servera.readLine();
+				if (string.startsWith("> Fajl"))
+					primi_fajl();
 				System.out.println(string);
 				if (string.startsWith("> Prijatno;")) {
 					kraj = true;
@@ -62,6 +65,17 @@ public class Klijent implements Runnable {
 			System.err.println("IOException pri konektovanju sa hostom: " + e);
 		}
 
+	}
+
+	static void primi_fajl() {
+		try {
+			RandomAccessFile fajl = new RandomAccessFile("uplata.txt", "rw");
+			fajl.writeBytes(od_servera.readLine());
+			fajl.close();
+		} catch (IOException e) {
+			System.out.println("Greska u primanju fajla!");
+			e.printStackTrace();
+		}
 	}
 
 }
