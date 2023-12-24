@@ -68,8 +68,15 @@ public class Klijent implements Runnable {
 	}
 
 	static void primi_fajl() {
+		File f = new File("uplata.txt");
+		int br = 1;
+		if (f.exists()) {
+			while ((f = new File("uplata" + br + ".txt")).exists()) {
+				br++;
+			}
+		}
 		try {
-			RandomAccessFile fajl = new RandomAccessFile("uplata.txt", "rw");
+			RandomAccessFile fajl = new RandomAccessFile(f, "rw");
 			fajl.writeBytes(od_servera.readLine());
 			fajl.close();
 		} catch (IOException e) {
